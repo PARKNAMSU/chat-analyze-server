@@ -26,3 +26,7 @@ func GetWebSocket(w http.ResponseWriter, r *http.Request) *websocket.Conn {
 	log.Println("Client connected")
 	return conn
 }
+
+func AttendChatRoom(roomId int, conn *websocket.Conn) {
+
+}
