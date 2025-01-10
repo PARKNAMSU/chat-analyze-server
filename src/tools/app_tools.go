@@ -1,9 +1,12 @@
 package tools
 
 import (
+	"errors"
 	"log"
 	"net/http"
+	"strconv"
 
+	"chat-analyze.com/chat-analyze-server/src/cache/room_cache"
 	"github.com/gorilla/websocket"
 )
 
@@ -27,6 +30,29 @@ func GetWebSocket(w http.ResponseWriter, r *http.Request) *websocket.Conn {
 	return conn
 }
 
-func AttendChatRoom(roomId int, conn *websocket.Conn) {
+func AttendRoom(header http.Header) (
+	userId int,
+	chatId int,
+	err error,
+) {
+	userId = 0
+	chatId = 0
 
+	headerUserId := header.Get("userId")
+	headerChatId := header.Get("chatId")
+
+	if headerUserId == "" || headerChatId == "" {
+		return userId, chatId, errors.New("Not Exist UserId or ChatId")
+	}
+
+	userId, err = strconv.Atoi(headerUserId)
+	chatId, err = strconv.Atoi(headerChatId)
+
+	if err != nil {
+		return userId, chatId, err
+	}
+
+	room_cache.SetChatCache(chatId, userId)
+
+	return userId, chatId, nil
 }

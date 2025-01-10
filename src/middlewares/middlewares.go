@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"chat-analyze.com/chat-analyze-server/src/cache"
-	"chat-analyze.com/chat-analyze-server/src/models"
+	"chat-analyze.com/chat-analyze-server/src/models/common_models"
 	"chat-analyze.com/chat-analyze-server/src/tools"
-	"github.com/gorilla/websocket"
 )
 
-func AddGroupMiddleware(next models.SocketRouter) http.HandlerFunc {
+// 소켓 연결시점에 공용적으로 처리하는 미들웨어
+func CommonMiddleware(next common_models.SocketRouter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		conn := tools.GetWebSocket(w, r)
 		if conn == nil {
@@ -26,20 +25,19 @@ func AddGroupMiddleware(next models.SocketRouter) http.HandlerFunc {
 
 		var clientData map[string]int
 		err = json.Unmarshal(dataStr, &clientData)
-		roomId, isExist := clientData["roomId"]
+		userId, chatId, err := tools.AttendRoom(r.Header)
 
-		if err != nil || !isExist || roomId == 0 {
-			w.Write([]byte("Not Exist RoomId"))
+		if err != nil || chatId == 0 || userId == 0 {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Not Exist Room"))
 		}
 
-		if cache.USER_GROUP[roomId] == nil {
-			cache.USER_GROUP[roomId] = make(map[*websocket.Conn]bool)
-		}
+		tools.PrintInfoLog("AddGroupMiddleware", fmt.Sprintf("Client connected to group: %d\n", chatId))
 
-		cache.USER_GROUP[roomId][conn] = true
-
-		tools.PrintInfoLog("AddGroupMiddleware", fmt.Sprintf("Client connected to group: %d\n", clientData["roomId"]))
-
-		next(w, r, conn)
+		next(w, r, &common_models.GetConnectData{
+			Conn:   conn,
+			UserId: userId,
+			ChatId: chatId,
+		})
 	}
 }
