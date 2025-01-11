@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"chat-analyze.com/chat-analyze-server/src/models/messaging_models"
+	"chat-analyze.com/chat-analyze-server/internal/models/messaging_models"
 	"github.com/gorilla/websocket"
 )
 

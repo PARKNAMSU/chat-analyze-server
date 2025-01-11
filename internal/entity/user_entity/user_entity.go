@@ -1,4 +1,4 @@
-package user_schema
+package user_entity
 
 import "time"
 
@@ -14,7 +14,7 @@ type UserSchema struct {
 	IpAddr     *string    `db:"ipAddr"`     // 사용자 아이피 주소 - not null
 	Auth       *int       `db:"auth"`       // 사용지 인증 여부 0:미인증, 1:인증 - not null, default: 0
 	AuthMethod *int       `db:"authMethod"` // 사용자 인증 방법 0:이메일, 1:모바일폰 - nullable, default: 0
-	deviceId   *string    `db:"deviceId"`   // 사용자 디바이스 아이디 - nullable
+	DeviceId   *string    `db:"deviceId"`   // 사용자 디바이스 아이디 - nullable
 	Locale     *string    `db:"locale"`     // 사용자 지역 - not null, default: "XX"
 	UpdatedAt  *time.Time `db:"updatedAt"`  // 유저 수정 시간 - nullable
 	CreatedAt  *time.Time `db:"createdAt"`  // 유저 생성 시간 - not null, default: now()

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"chat-analyze.com/chat-analyze-server/src/cache/room_cache"
+	"chat-analyze.com/chat-analyze-server/internal/cache/room_cache"
 	"github.com/gorilla/websocket"
 )
 

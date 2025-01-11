@@ -1,4 +1,4 @@
-package image_schema
+package image_entity
 
 import "time"
 

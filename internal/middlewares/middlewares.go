@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"chat-analyze.com/chat-analyze-server/src/models/common_models"
-	"chat-analyze.com/chat-analyze-server/src/tools"
+	"chat-analyze.com/chat-analyze-server/internal/models/common_models"
+	"chat-analyze.com/chat-analyze-server/internal/tools"
 )
 
 // 소켓 연결시점에 공용적으로 처리하는 미들웨어

@@ -1,4 +1,4 @@
-package chat_schema
+package chat_entity
 
 import "time"
 
@@ -8,7 +8,7 @@ Description:
 
 	PK: ChatId
 */
-type ChatSchema struct {
+type ChatEntity struct {
 	ChatId      *int       `db:"chatId"`      // 채팅방 아이디 - not null, auto_increment, primary key
 	IpAddr      *string    `db:"ipAddr"`      // 생성된 시점 아이피 주소 - not null
 	UserId      *int       `db:"userId"`      // 채팅방 생성자 아이디 - not null
@@ -23,10 +23,10 @@ type ChatSchema struct {
 Description:
 
 	PK: ChatId
-	Relation: ChatSchema.ChatId = ChatInformationSchema.ChatId (1:1)
+	Relation: ChatEntity.ChatId = ChatInformationEntity.ChatId (1:1)
 */
-type ChatInformationSchema struct {
-	ChatId     *int       `db:"chatId"`     // ChatSchema.ChatId - not null, PK
+type ChatInformationEntity struct {
+	ChatId     *int       `db:"chatId"`     // ChatEntity.ChatId - not null, PK
 	ChatName   *string    `db:"chatName"`   // 채팅방 이름 - nullable
 	ChatType   *int       `db:"chatType"`   // 채팅방 타입 0:개인, 1:공개그룹, 2:비공개그룹 - not null, default: 0
 	Password   *int       `db:"password"`   // 채팅방 비밀번호 - nullable
@@ -41,12 +41,12 @@ type ChatInformationSchema struct {
 Description:
 
 	PK: ChatId, UserId
-	Relation: ChatSchema.ChatId = ChatUserSchema.ChatId (1:N), UserSchema.UserId = ChatUserSchema.UserId (1:N)
+	Relation: ChatEntity.ChatId = ChatUserEntity.ChatId (1:N), UserEntity.UserId = ChatUserEntity.UserId (1:N)
 */
-type ChatUserSchema struct {
-	ChatId      *string    `db:"chatId"`      // ChatSchema.ChatId - not null, PK
-	UserId      *string    `db:"userId"`      // ChatUserSchema.UserId - not null, PK
-	UserType    *int       `db:"userType"`    // ChatUserSchema.UserType 1:생성자, 2:참가자 - not null, default: 2
+type ChatUserEntity struct {
+	ChatId      *string    `db:"chatId"`      // ChatEntity.ChatId - not null, PK
+	UserId      *string    `db:"userId"`      // ChatUserEntity.UserId - not null, PK
+	UserType    *int       `db:"userType"`    // ChatUserEntity.UserType 1:생성자, 2:참가자 - not null, default: 2
 	Status      *int       `db:"status"`      // 채팅방 상태 0:영구정지, 1:정상, 2:정지됨 - not null, default: 1
 	ForbiddenAt *time.Time `db:"forbiddenAt"` // 정지 시간 - nullable
 	AttendedAt  *time.Time `db:"attendedAt"`  // 참가 시간 - not null, default: now()
