@@ -59,7 +59,7 @@ func App() {
 		}
 	}
 
-	http.HandleFunc("/ws", middlewares.CommonMiddleware(appHandler))
+	http.HandleFunc("/ws", middlewares.SocketMiddleware(appHandler))
 
 	err := http.ListenAndServe(fmt.Sprintf(":"+port), nil)
 

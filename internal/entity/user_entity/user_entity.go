@@ -3,12 +3,12 @@ package user_entity
 import "time"
 
 /*
-사용자 INDEX 스키마
+사용자 INDEX 엔티티
 Description:
 
 	PK: UserId
 */
-type UserSchema struct {
+type UserEntity struct {
 	UserId     *int       `db:"userId"`     // 사용자 아이디 - not null, auto_increment, primary key
 	Status     *int       `db:"status"`     // 사용자 상태 0:탈퇴, 1:정상, 2:정지 - not null, default: 1
 	IpAddr     *string    `db:"ipAddr"`     // 사용자 아이피 주소 - not null
@@ -21,13 +21,13 @@ type UserSchema struct {
 }
 
 /*
-사용자 정보 스키마
+사용자 정보 엔티티
 Description:
 
 	PK: UserId
-	relation: UserSchema.UserId = UserInformationSchema.UserId (1:1)
+	relation: UserEntity.UserId = UserInformationEntity.UserId (1:1)
 */
-type UserInformationSchema struct {
+type UserInformationEntity struct {
 	UserId    *int       `db:"userId"`    // 사용자 아이디 - not null, PK
 	Name      *int       `db:"name"`      // 사용자 이름 - nullable
 	Email     *int       `db:"email"`     // 사용자 로그인 이메일 - not null
@@ -38,13 +38,13 @@ type UserInformationSchema struct {
 }
 
 /*
-사용자 oauth 등록 스키마
+사용자 oauth 등록 엔티티
 Description:
 
 	PK: UserId
-	relation: UserSchema.UserId = UserOauthSchema.UserId (1:1)
+	relation: UserEntity.UserId = UserOauthEntity.UserId (1:1)
 */
-type UserOauthSchema struct {
+type UserOauthEntity struct {
 	UserId    *int       `db:"userId"`    // 사용자 아이디 - not null, PK
 	OauthKey  *string    `db:"oauthKey"`  // oauth 키 - not null, PK
 	OauthType *string    `db:"oauthType"` // 사용 oauth 종류 ex) google.com - not null

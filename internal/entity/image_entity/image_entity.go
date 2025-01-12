@@ -3,9 +3,9 @@ package image_entity
 import "time"
 
 /*
-기본 이미지 스키마
+기본 이미지 엔티티
 */
-type ImageSchema struct {
+type ImageEntity struct {
 	OriginFile   *string    `db:"originFile"`
 	JpegFile     *string    `db:"jpegFile"`
 	WebpFile     *string    `db:"webpFile"`
@@ -18,16 +18,11 @@ type ImageSchema struct {
 }
 
 /*
-유저 프로필 이미지 스키마
-Description:
-
-	ImageSchema 상속
-	PK: ImageId
-	INDEX: (userId)
+유저 프로필 이미지 엔티티
 */
-type UserTitleImageSchema struct {
+type UserProfileImageEntity struct {
 	ImageId *string `db:"imageId"` // 이미지 생성 아이디 - not null
 	UserId  *int    `db:"userId"`  // 유저 아이디 - not null, PK
 	Device  *int    `db:"device"`  // 이미지 디바이스 0:모바일, 1:웹 - not null, default: 0
-	ImageSchema
+	ImageEntity
 }
