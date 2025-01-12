@@ -1,5 +1,7 @@
 package options
 
+import "chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
+
 const (
 	StatusContinue           = 100
 	StatusSwitchingProtocols = 101
@@ -69,5 +71,11 @@ const (
 )
 
 const (
-	INVALID_ROUTER = "Invalid Router"
+	INVALID_ROUTER  = "Invalid Router"
+	INVALID_API_KEY = "Invalid API Key"
+)
+
+const (
+	CONTEXT_USER_ID common_model.ContextKey = "userId"
+	CONTEXT_CHAT_ID common_model.ContextKey = "chatId"
 )
