@@ -1,11 +1,24 @@
-package controller
+package chat_controller
 
-var (
-	Controller *ChatController = &ChatController{}
+import (
+	"chat-analyze.com/chat-analyze-server/internal/usecase/chat_usecase"
 )
 
-type ChatController struct{}
+var (
+	controller *ChatController
+)
 
-func (cc *ChatController) SendText() {
+func GetController() *ChatController {
+	if controller == nil {
+		controller = &ChatController{}
+	}
+	return controller
+}
 
+type ChatController struct {
+	chatUseCase *chat_usecase.ChatUseCase
+}
+
+func (c *ChatController) SendMessage() {
+	c.chatUseCase.SendMessage()
 }

@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/dto/common_dto"
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
 	"chat-analyze.com/chat-analyze-server/internal/middlewares"
-	"chat-analyze.com/chat-analyze-server/internal/models/common_models"
-	"chat-analyze.com/chat-analyze-server/internal/models/messaging_models"
 	"chat-analyze.com/chat-analyze-server/internal/options"
 	"chat-analyze.com/chat-analyze-server/internal/router/chat_router"
 	"chat-analyze.com/chat-analyze-server/internal/tools"
@@ -22,7 +22,7 @@ var (
 )
 
 func App() {
-	appHandler := func(w http.ResponseWriter, r *http.Request, connData *common_models.GetConnectData) {
+	appHandler := func(w http.ResponseWriter, r *http.Request, connData *common_model.GetConnectData) {
 		conn := connData.Conn
 		defer conn.Close()
 		for {
@@ -31,7 +31,7 @@ func App() {
 				break
 			}
 
-			var clientData messaging_models.RequestDefault
+			var clientData common_dto.DefaultRequest
 
 			err = json.Unmarshal(message, &clientData)
 

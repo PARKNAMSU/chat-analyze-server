@@ -1,12 +1,12 @@
 package tools
 
 import (
-	"chat-analyze.com/chat-analyze-server/internal/models/messaging_models"
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/response/common_response"
 	"github.com/gorilla/websocket"
 )
 
 func SendError(conn *websocket.Conn, message string, status int) {
-	conn.WriteJSON(messaging_models.ResponseDefault{
+	conn.WriteJSON(common_response.ResponseDefault{
 		Message: &message,
 		Status:  status,
 	})
@@ -14,7 +14,7 @@ func SendError(conn *websocket.Conn, message string, status int) {
 
 func SendCheck(conn *websocket.Conn) {
 	message := "Alive"
-	conn.WriteJSON(messaging_models.ResponseDefault{
+	conn.WriteJSON(common_response.ResponseDefault{
 		Message: &message,
 		Status:  200,
 	})

@@ -1,8 +1,4 @@
-package chat_models
-
-type SendTextRequest struct {
-	Message string `json:"message"`
-}
+package chat_response
 
 type SendTextResponse struct {
 	MessageId int    `json:"messageId"` // 메시지 아이디 - required

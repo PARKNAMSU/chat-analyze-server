@@ -1,8 +1,4 @@
-package messaging_models
-
-type RequestDefault struct {
-	Router string `json:"router"` // 호출한 작업의 카테고리 - required
-}
+package common_response
 
 // 클라이언트에 메세지 전송 시 기본적으로 사용되는 구조체
 type ResponseDefault struct {

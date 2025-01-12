@@ -3,7 +3,7 @@ package chat_entity
 import "time"
 
 /*
-채팅방 INDEX 스키마
+채팅방 INDEX 엔티티
 Description:
 
 	PK: ChatId
@@ -19,7 +19,7 @@ type ChatEntity struct {
 }
 
 /*
-채팅방 정보 스키마
+채팅방 정보 엔티티
 Description:
 
 	PK: ChatId
@@ -37,7 +37,7 @@ type ChatInformationEntity struct {
 }
 
 /*
-채팅방 참가 유저 스키마
+채팅방 참가 유저 엔티티
 Description:
 
 	PK: ChatId, UserId
@@ -52,9 +52,18 @@ type ChatUserEntity struct {
 	AttendedAt  *time.Time `db:"attendedAt"`  // 참가 시간 - not null, default: now()
 }
 
+/*
+채팅방 메세지 엔티티
+Description:
+
+	PK: MessageId,
+	Relation: ChatEntity.ChatId = ChatMesaageEntity.ChatId (1:N), UserEntity.UserId = ChatMessageEntity.UserId (1:N)
+	Index: (ChatId, UserId)
+*/
 type ChatMessageEntity struct {
-	MessageId   *int `db:"messageId"`   // 메세지 Id - not nul, auto_increment, PK
-	ChatId      *int `db:"chatId"`      // ChatEntity.ChatId - not null
-	UserId      *int `db:"userId"`      // ChatUserEntity.UserId - not null
-	MessageType *int `db:"messageType"` // 메세지 타입 0:text, 1:image, 2:file - not null, default: 0
+	MessageId *int    `db:"messageId"` // 메세지 Id - not nul, auto_increment, PK
+	ChatId    *int    `db:"chatId"`    // ChatEntity.ChatId - not null
+	UserId    *int    `db:"userId"`    // ChatUserEntity.UserId - not null
+	ImageId   *string `db:"imageId"`   // [이미지 타입]이미지 아이디 - nullable
+	Message   *string `db:"message"`   // [텍스트 타입]메세지 text - nullable
 }

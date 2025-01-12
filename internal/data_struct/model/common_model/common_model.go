@@ -1,4 +1,4 @@
-package common_models
+package common_model
 
 import (
 	"net/http"

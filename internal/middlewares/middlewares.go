@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"chat-analyze.com/chat-analyze-server/internal/models/common_models"
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
 	"chat-analyze.com/chat-analyze-server/internal/tools"
 )
 
 // 소켓 연결시점에 공용적으로 처리하는 미들웨어
-func SocketMiddleware(next common_models.SocketRouter) http.HandlerFunc {
+func SocketMiddleware(next common_model.SocketRouter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		conn := tools.GetWebSocket(w, r)
 		if conn == nil {
@@ -25,7 +25,7 @@ func SocketMiddleware(next common_models.SocketRouter) http.HandlerFunc {
 
 		tools.PrintInfoLog("AddGroupMiddleware", fmt.Sprintf("Client connected to group: %d\n", chatId))
 
-		next(w, r, &common_models.GetConnectData{
+		next(w, r, &common_model.GetConnectData{
 			Conn:   conn,
 			UserId: userId,
 			ChatId: chatId,
