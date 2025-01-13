@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"chat-analyze.com/chat-analyze-server/internal/options"
+	"chat-analyze.com/chat-analyze-server/internal/option"
 	"chat-analyze.com/chat-analyze-server/internal/tools"
 )
 
@@ -19,8 +19,8 @@ func AttendChatMiddleware(w http.ResponseWriter, r *http.Request, next http.Hand
 
 	tools.PrintInfoLog("AttendChatMiddleware", fmt.Sprintf("Client connected to group: %d\n", chatId))
 
-	ctx := context.WithValue(r.Context(), options.CONTEXT_USER_ID, userId)
-	ctx = context.WithValue(ctx, options.CONTEXT_CHAT_ID, chatId)
+	ctx := context.WithValue(r.Context(), option.CONTEXT_USER_ID, userId)
+	ctx = context.WithValue(ctx, option.CONTEXT_CHAT_ID, chatId)
 
 	next.ServeHTTP(w, r.WithContext(ctx))
 }

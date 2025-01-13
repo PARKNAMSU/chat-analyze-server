@@ -13,7 +13,7 @@ import (
 	"chat-analyze.com/chat-analyze-server/internal/middleware/chat_middleware"
 	"chat-analyze.com/chat-analyze-server/internal/middleware/common_middleware"
 	"chat-analyze.com/chat-analyze-server/internal/middleware/index_middleware"
-	"chat-analyze.com/chat-analyze-server/internal/options"
+	"chat-analyze.com/chat-analyze-server/internal/option"
 	"chat-analyze.com/chat-analyze-server/internal/router/chat_router"
 	"chat-analyze.com/chat-analyze-server/internal/tools"
 	"github.com/joho/godotenv"
@@ -26,15 +26,15 @@ var (
 
 func socketHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		tools.SendErrorResponse(w, options.NOT_FOUND, options.StatusNotFound)
+		tools.SendErrorResponse(w, option.NOT_FOUND, option.StatusNotFound)
 	}
 	conn := tools.GetWebSocket(w, r)
 
-	userId, isUserExist := r.Context().Value(options.CONTEXT_USER_ID).(int)
-	chatId, isChatExist := r.Context().Value(options.CONTEXT_CHAT_ID).(int)
+	userId, isUserExist := r.Context().Value(option.CONTEXT_USER_ID).(int)
+	chatId, isChatExist := r.Context().Value(option.CONTEXT_CHAT_ID).(int)
 
 	if !isUserExist || !isChatExist {
-		tools.SendError(conn, options.INVALID_ROUTER, options.StatusBadRequest)
+		tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 		return
 	}
 
@@ -56,14 +56,14 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		err = json.Unmarshal(message, &clientData)
 
 		if err != nil {
-			tools.SendError(conn, options.INVALID_ROUTER, options.StatusBadRequest)
+			tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 			continue
 		}
 
 		routers := strings.Split(clientData.Router, "/")
 
 		if len(routers) < 3 {
-			tools.SendError(conn, options.INVALID_ROUTER, options.StatusBadRequest)
+			tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 			continue
 		}
 
@@ -73,7 +73,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		case "chat":
 			chat_router.ChatRouter(connData, routers[2])
 		default:
-			tools.SendError(conn, options.INVALID_ROUTER, options.StatusBadRequest)
+			tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 		}
 
 	}

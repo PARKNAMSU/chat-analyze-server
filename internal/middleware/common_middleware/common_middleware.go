@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"chat-analyze.com/chat-analyze-server/internal/options"
+	"chat-analyze.com/chat-analyze-server/internal/option"
 	"chat-analyze.com/chat-analyze-server/internal/tools"
 )
 
@@ -18,7 +18,7 @@ func SetHeader(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 func APIKeyValidation(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	apiKey := r.Header.Get("x-api-key")
 	if apiKey != os.Getenv("SERVER_API_KEY") {
-		tools.SendErrorResponse(w, options.INVALID_API_KEY, http.StatusUnauthorized)
+		tools.SendErrorResponse(w, option.INVALID_API_KEY, http.StatusUnauthorized)
 		return
 	}
 	next(w, r)
