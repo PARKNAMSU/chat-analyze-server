@@ -73,6 +73,7 @@ const (
 const (
 	INVALID_ROUTER  = "Invalid Router"
 	INVALID_API_KEY = "Invalid API Key"
+	NOT_FOUND       = "Not Found"
 )
 
 const (

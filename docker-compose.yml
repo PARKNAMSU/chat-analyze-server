@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  myapp:
+    build: .
+    restart: always  # 서버가 다운되면 자동으로 재시작
+    ports:
+      - "8080:8080"

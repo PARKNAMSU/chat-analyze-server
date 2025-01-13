@@ -3,6 +3,7 @@ package router
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -24,6 +25,9 @@ var (
 )
 
 func socketHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		tools.SendErrorResponse(w, options.NOT_FOUND, options.StatusNotFound)
+	}
 	conn := tools.GetWebSocket(w, r)
 
 	userId, isUserExist := r.Context().Value(options.CONTEXT_USER_ID).(int)
@@ -82,6 +86,10 @@ func App() {
 	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler, chat_middleware.AttendChatMiddleware))
 	mux.HandleFunc("/healthCheck", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("alive"))
+	})
+	mux.HandleFunc("/restartTest", func(w http.ResponseWriter, r *http.Request) {
+		log.Panicln("server down")
+		w.Write([]byte("downx"))
 	})
 
 	tools.PrintInfoLog("App", "Server started at "+port)
