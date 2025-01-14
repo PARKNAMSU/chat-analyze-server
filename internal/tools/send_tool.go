@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-func SendError(conn *websocket.Conn, message string, status int) {
+func WSSendError(conn *websocket.Conn, message string, status int) {
 	conn.WriteJSON(common_response.ResponseDefault{
 		Message: &message,
 		Status:  status,
@@ -27,7 +27,7 @@ func SendErrorResponse(w http.ResponseWriter, message string, status int) {
 	w.Write(data)
 }
 
-func SendCheck(conn *websocket.Conn) {
+func WSSendCheck(conn *websocket.Conn) {
 	message := "Alive"
 	conn.WriteJSON(common_response.ResponseDefault{
 		Message: &message,

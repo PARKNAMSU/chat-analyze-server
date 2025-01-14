@@ -34,7 +34,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	chatId, isChatExist := r.Context().Value(option.CONTEXT_CHAT_ID).(int)
 
 	if !isUserExist || !isChatExist {
-		tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
+		tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 		return
 	}
 
@@ -56,24 +56,24 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		err = json.Unmarshal(message, &clientData)
 
 		if err != nil {
-			tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
+			tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 			continue
 		}
 
 		routers := strings.Split(clientData.Router, "/")
 
 		if len(routers) < 3 {
-			tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
+			tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 			continue
 		}
 
 		switch routers[1] {
 		case "check":
-			tools.SendCheck(conn)
+			tools.WSSendCheck(conn)
 		case "chat":
-			chat_router.ChatRouter(connData, routers[2])
+			chat_router.WSChatRouter(connData, routers[2])
 		default:
-			tools.SendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
+			tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 		}
 
 	}
@@ -83,13 +83,17 @@ func App() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler, chat_middleware.AttendChatMiddleware))
 	mux.HandleFunc("/healthCheck", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("alive"))
 	})
+
+	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler, chat_middleware.AttendChatMiddleware))
+
+	mux.Handle("/chat/", http.StripPrefix("/chat", chat_router.APIChatRouter()))
+
 	mux.HandleFunc("/restartTest", func(w http.ResponseWriter, r *http.Request) {
 		log.Panicln("server down")
-		w.Write([]byte("downx"))
+		w.Write([]byte("server down"))
 	})
 
 	tools.PrintInfoLog("App", "Server started at "+port)
