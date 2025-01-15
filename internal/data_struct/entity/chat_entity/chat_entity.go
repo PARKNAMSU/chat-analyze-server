@@ -9,9 +9,9 @@ Description:
 	PK: ChatId
 */
 type ChatEntity struct {
-	ChatId      *int       `db:"chatId"`      // 채팅방 아이디 - not null, auto_increment, PK
-	IpAddr      *string    `db:"ipAddr"`      // 생성된 시점 아이피 주소 - not null
-	UserId      *int       `db:"userId"`      // 채팅방 생성자 아이디 - not null
+	Id          *int       `db:"id"`          // 채팅방 아이디 - not null, auto_increment, PK
+	PlatformId  *int       `db:"platform_id"` // 채팅방 생성자 아이디 - not null
+	UserKey     *string    `db:"user_key"`
 	Status      *int       `db:"status"`      // 채팅방 상태 0:삭제됨, 1:정상, 2:정지됨 - not null, default: 1
 	ForbiddenAt *time.Time `db:"forbiddenAt"` // 채팅방 정지 시간 - nullable
 	UpdatedAt   *time.Time `db:"updatedAt"`   // 채팅방 수정 시간 - nullable
@@ -44,12 +44,12 @@ Description:
 	Relation: ChatEntity.ChatId = ChatUserEntity.ChatId (1:N), UserEntity.UserId = ChatUserEntity.UserId (1:N)
 */
 type ChatUserEntity struct {
-	ChatId      *int       `db:"chatId"`      // ChatEntity.ChatId - not null, PK
-	UserId      *int       `db:"userId"`      // ChatUserEntity.UserId - not null, PK
-	UserType    *int       `db:"userType"`    // ChatUserEntity.UserType 1:생성자, 2:참가자 - not null, default: 2
-	Status      *int       `db:"status"`      // 채팅방 상태 0:영구정지, 1:정상, 2:정지됨 - not null, default: 1
-	ForbiddenAt *time.Time `db:"forbiddenAt"` // 정지 시간 - nullable
-	AttendedAt  *time.Time `db:"attendedAt"`  // 참가 시간 - not null, default: now()
+	ChatId      *int       `db:"chat_id"`      // ChatEntity.ChatId - not null, PK
+	UserKey     *int       `db:"user_key"`     // ChatUserEntity.UserId - not null, PK
+	UserType    *int       `db:"user_type"`    // ChatUserEntity.UserType 1:생성자, 2:참가자 - not null, default: 2
+	Status      *int       `db:"status"`       // 채팅방 상태 0:영구정지, 1:정상, 2:정지됨 - not null, default: 1
+	ForbiddenAt *time.Time `db:"forbidden_at"` // 정지 시간 - nullable
+	AttendedAt  *time.Time `db:"attended_at"`  // 참가 시간 - not null, default: now()
 }
 
 /*
@@ -61,9 +61,9 @@ Description:
 	Index: (ChatId, UserId)
 */
 type ChatMessageEntity struct {
-	MessageId *int    `db:"messageId"` // 메세지 Id - not nul, auto_increment, PK
-	ChatId    *int    `db:"chatId"`    // ChatEntity.ChatId - not null
-	UserId    *int    `db:"userId"`    // ChatUserEntity.UserId - not null
-	ImageId   *string `db:"imageId"`   // [이미지 타입]이미지 아이디 - nullable
-	Message   *string `db:"message"`   // [텍스트 타입]메세지 text - nullable
+	Id      *int    `db:"id"`       // 메세지 Id - not nul, auto_increment, PK
+	ChatId  *int    `db:"chatId"`   // ChatEntity.ChatId - not null
+	UserKey *int    `db:"user_key"` // ChatUserEntity.UserId - not null
+	ImageId *string `db:"image_id"` // [이미지 타입]이미지 아이디 - nullable
+	Message *string `db:"message"`  // [텍스트 타입]메세지 text - nullable
 }
