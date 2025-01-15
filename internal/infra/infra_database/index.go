@@ -7,8 +7,8 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type DBEngine = string
-type DBName = string
+type DBEngine = int
+type DBType = int
 
 // 특정 DB에 종속되지 않게 connector interface 추상화
 type connectorInterface interface {
@@ -16,18 +16,18 @@ type connectorInterface interface {
 }
 
 var (
-	MYSQL    DBEngine = "mysql"
-	POSTGRES DBEngine = "postgres"
+	MYSQL    DBEngine = 0
+	POSTGRES DBEngine = 1
 )
 
 var (
-	SlaveDB  DBName = "SLAVE_DB"
-	MasterDB DBName = "Master_DB"
+	SlaveDB  DBType = 0
+	MasterDB DBType = 1
 )
 
 type ConnectOption struct {
 	Engine   DBEngine
-	Database DBName
+	Database DBType
 }
 
 func DBConnect(connOption ConnectOption) *sqlx.DB {

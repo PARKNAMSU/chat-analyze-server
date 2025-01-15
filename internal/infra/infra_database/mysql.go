@@ -9,7 +9,7 @@ import (
 )
 
 type mysqlDB struct {
-	name DBName
+	name DBType
 }
 
 var (

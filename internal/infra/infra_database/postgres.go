@@ -10,7 +10,7 @@ import (
 )
 
 type postgresDB struct {
-	name DBName
+	name DBType
 }
 
 func (d *postgresDB) connector() (*sqlx.DB, error) {
