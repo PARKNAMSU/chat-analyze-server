@@ -1,22 +1,23 @@
-package chat_repository
+package platform_repository
 
 import (
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/platform_model"
 	"chat-analyze.com/chat-analyze-server/internal/infra/infra_database"
 	"github.com/jmoiron/sqlx"
 )
 
-type ChatRepository struct {
+type PlatformRepository struct {
 	slaveDB  *sqlx.DB
 	masterDB *sqlx.DB
 }
 
 var (
-	repository *ChatRepository
+	repository *PlatformRepository
 )
 
-func GetRepository() *ChatRepository {
+func GetRepository() *PlatformRepository {
 	if repository == nil {
-		repository = &ChatRepository{
+		repository = &PlatformRepository{
 			slaveDB: infra_database.
 				DBConnect(
 					infra_database.
@@ -38,6 +39,10 @@ func GetRepository() *ChatRepository {
 	return repository
 }
 
-func (r *ChatRepository) SendMessage() {
-	// do something
+func (r *PlatformRepository) GetPlatform() platform_model.PartnerPlatform {
+	platform := platform_model.PartnerPlatform{}
+
+	// todo: GetPlatform logic 구현
+
+	return platform
 }
