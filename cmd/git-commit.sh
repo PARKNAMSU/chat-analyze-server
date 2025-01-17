@@ -3,7 +3,7 @@
 export TAG="$1"
 export COMMIT_EXPLAIN=""
 
-if [ "$TAG" == "patch" ] || [ "$TAG" == "fix" ] || [ "$TAG" == "add" ] || [ "$TAG" == "setting" ]; then
+if [ "$TAG" == "patch" ] || [ "$TAG" == "fix" ] || [ "$TAG" == "add" ] || [ "$TAG" == "setting" ] || [ "$TAG" == "feature" ]; then
     COMMIT_EXPLAIN="$2"
 else
     TAG="default"
