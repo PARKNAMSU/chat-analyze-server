@@ -5,6 +5,8 @@ import (
 
 	"chat-analyze.com/chat-analyze-server/internal/controller/chat_controller"
 	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
+	"chat-analyze.com/chat-analyze-server/internal/middleware/common_middleware"
+	"chat-analyze.com/chat-analyze-server/internal/middleware/index_middleware"
 )
 
 var (
@@ -25,9 +27,9 @@ func WSChatRouter(connData *common_model.GetConnectData, router string) {
 func APIChatRouter() *http.ServeMux {
 	if chatRouter == nil {
 		chatRouter := http.NewServeMux()
-		chatRouter.HandleFunc("/createChat", func(w http.ResponseWriter, r *http.Request) {
+		chatRouter.HandleFunc("/createChat", index_middleware.MiddlewareChaining(func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("created"))
-		})
+		}, common_middleware.PlatformValidation))
 	}
 	return chatRouter
 }

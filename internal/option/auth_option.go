@@ -1,5 +1,7 @@
 package option
 
+import "os"
+
 type PermissionInformation struct {
 	Type         string
 	Permission   int
@@ -33,4 +35,6 @@ var (
 		MaxUserNum:   5000,
 		MaxAccessNum: 100,
 	}
+
+	API_ENCRIPTION_KEY = os.Getenv("API_ENCRIPTION_KEY")
 )

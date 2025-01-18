@@ -71,14 +71,17 @@ const (
 )
 
 const (
-	INVALID_ROUTER  = "Invalid Router"
-	INVALID_API_KEY = "Invalid API Key"
-	NOT_FOUND       = "Not Found"
+	INVALID_ROUTER        = "Invalid Router"
+	INVALID_API_KEY       = "Invalid API Key"
+	NOT_FOUND             = "Not Found"
+	INVALID_AUTHORIZATION = "unAuthorization"
+	PERMISSION_DENIED     = "Permission Denied"
 )
 
 const (
-	CONTEXT_USER_ID common_model.ContextKey = "userId"
-	CONTEXT_CHAT_ID common_model.ContextKey = "chatId"
+	CONTEXT_USER_ID  common_model.ContextKey = "userId"
+	CONTEXT_CHAT_ID  common_model.ContextKey = "chatId"
+	CONTEXT_PLATFORM common_model.ContextKey = "platform"
 )
 
 const (

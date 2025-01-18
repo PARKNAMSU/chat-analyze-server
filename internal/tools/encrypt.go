@@ -12,7 +12,7 @@ import (
 // EncryptString encrypts a string using AES-GCM and returns a base64 encoded ciphertext.
 func Encrypt(encryptData []byte, key string) (string, error) {
 	if len(key) != 32 {
-		return "", errors.New("key length must be 32 bytes for AES-256")
+		key = adjustKeyLength(key, 32)
 	}
 
 	block, err := aes.NewCipher([]byte(key))
@@ -39,7 +39,7 @@ func Encrypt(encryptData []byte, key string) (string, error) {
 // DecryptString decrypts a base64 encoded ciphertext string using AES-GCM and returns the plaintext.
 func Decrypt(encryptedText, key string) ([]byte, error) {
 	if len(key) != 32 {
-		return nil, errors.New("key length must be 32 bytes for AES-256")
+		key = adjustKeyLength(key, 32)
 	}
 
 	// Decode the base64 encoded ciphertext
@@ -75,7 +75,7 @@ func Decrypt(encryptedText, key string) ([]byte, error) {
 	return plainText, nil
 }
 
-func AdjustKeyLength(key string, keyLength int) string {
+func adjustKeyLength(key string, keyLength int) string {
 	keyBytes := []byte(key)
 	if len(keyBytes) < keyLength {
 		paddedKey := make([]byte, keyLength)

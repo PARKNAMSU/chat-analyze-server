@@ -39,7 +39,7 @@ func GetRepository() *PlatformRepository {
 	return repository
 }
 
-func (r *PlatformRepository) GetPlatform() platform_model.PartnerPlatform {
+func (r *PlatformRepository) GetPlatformByDomain(domain string) platform_model.PartnerPlatform {
 	platform := platform_model.PartnerPlatform{}
 
 	// todo: GetPlatform logic 구현

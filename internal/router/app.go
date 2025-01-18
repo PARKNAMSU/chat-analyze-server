@@ -87,7 +87,7 @@ func App() {
 		w.Write([]byte("alive"))
 	})
 
-	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler, chat_middleware.AttendChatMiddleware))
+	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler, common_middleware.PlatformValidation, chat_middleware.AttendChatMiddleware))
 
 	mux.Handle("/chat/", http.StripPrefix("/chat", chat_router.APIChatRouter()))
 
