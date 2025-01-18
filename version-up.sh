@@ -3,7 +3,7 @@
 export PROJECT_VERSION=$(echo $(sed -n -e '1,1p' VERSION) | cut -d ' ' -f2)
 export READ_ME=$(sed -n -e '2,$p' VERSION) 
 
-log "previous ${PROJECT_VERSION}..."
+echo "previous ${PROJECT_VERSION}"
 
 export MAJOR=$(echo $PROJECT_VERSION | cut -d '.' -f1)
 export MINOR=$(echo $PROJECT_VERSION | cut -d '.' -f2)
