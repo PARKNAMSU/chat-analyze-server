@@ -3,7 +3,7 @@
 export PROJECT_VERSION=$(echo $(sed -n -e '1,1p' VERSION) | cut -d ' ' -f2)
 export READ_ME=$(sed -n -e '2,$p' VERSION) 
 
-log "previous ${PROJECT_VERSION}"
+log "previous ${PROJECT_VERSION}..."
 
 export MAJOR=$(echo $PROJECT_VERSION | cut -d '.' -f1)
 export MINOR=$(echo $PROJECT_VERSION | cut -d '.' -f2)
@@ -38,9 +38,9 @@ done
 
 PROJECT_VERSION="VERSION ${MAJOR}.${MINOR}.${PATCH}"
 
-log "now ${PROJECT_VERSION}"
+echo "now ${PROJECT_VERSION}"
 
-log $PROJECT_VERSION > ./VERSION
+echo $PROJECT_VERSION > ./VERSION
 
 cat << EOF >> ./VERSION
 $READ_ME
