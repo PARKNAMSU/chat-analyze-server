@@ -75,7 +75,6 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		default:
 			tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
 		}
-
 	}
 }
 

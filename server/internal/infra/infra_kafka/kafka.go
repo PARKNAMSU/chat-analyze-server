@@ -20,6 +20,7 @@ var (
 var (
 	config   *sarama.Config
 	producer = getProducer()
+	consumer = getConsumer()
 )
 
 func getConfig() *sarama.Config {
@@ -38,6 +39,15 @@ func getProducer() sarama.SyncProducer {
 		return nil
 	}
 	return getProducer
+}
+
+func getConsumer() sarama.Consumer {
+	consumer, err := sarama.NewConsumer(brokers, config)
+	if err == nil {
+		log.Println(err)
+		return nil
+	}
+	return consumer
 }
 
 func SendMessage[T any](topic string, data T) {
@@ -70,4 +80,8 @@ func SendMessage[T any](topic string, data T) {
 	if option.ENVIRONMENT == "development" {
 		fmt.Printf("Message is stored in partition %d, offset %d\n", partition, offset)
 	}
+}
+
+func SubscribeTopic(topic string) {
+
 }
