@@ -1,6 +1,14 @@
 package option
 
-import "chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
+import (
+	"os"
+
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
+)
+
+var (
+	ENVIRONMENT = os.Getenv("ENVIRONMENT")
+)
 
 const (
 	StatusContinue           = 100
