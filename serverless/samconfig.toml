@@ -1,0 +1,33 @@
+## version 설정
+version = 0.1
+
+## default 글로벌 설정
+[default.global.parameters]
+stack_name = ""
+region = "ap-southeast-2"
+
+## 배포 설정
+[default.deploy.parameters]
+stack_name = ""
+s3_bucket = ""
+s3_prefix = "deploy-file"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+
+[default.build.parameters]
+
+
+## nspark 글로벌 설정
+[nspark.global.parameters]
+stack_name = ""
+region = "ap-southeast-2"
+
+## 배포 설정
+[nspark.deploy.parameters]
+stack_name = ""
+s3_bucket = ""
+s3_prefix = "deploy-file"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+
+[nspark.build.parameters]
