@@ -88,14 +88,12 @@ func App() {
 
 	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler, common_middleware.PlatformValidation, chat_middleware.AttendChatMiddleware))
 
-	mux.Handle("/chat/", http.StripPrefix("/chat", chat_router.APIChatRouter()))
-
 	mux.HandleFunc("/restartTest", func(w http.ResponseWriter, r *http.Request) {
 		log.Panicln("server down")
 		w.Write([]byte("server down"))
 	})
 
-	tools.PrintInfoLog("App", "Server started at "+port)
+	tools.PrintInfoLog("App", "Broker Server started at "+port)
 
 	err := http.ListenAndServe(
 		fmt.Sprintf(":"+port),
@@ -109,7 +107,7 @@ func App() {
 	)
 
 	if err != nil {
-		tools.PanicError("App", fmt.Sprintf("Server start error: %s", err.Error()))
+		tools.PanicError("App", fmt.Sprintf("Broker Server start error: %s", err.Error()))
 		return
 	}
 }

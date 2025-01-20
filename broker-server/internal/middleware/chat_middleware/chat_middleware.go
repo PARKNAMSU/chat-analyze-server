@@ -10,6 +10,7 @@ import (
 )
 
 func AttendChatMiddleware(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	// todo : platform 정책에 따라 유저 키 타입 구분
 	userId, chatId, err := tools.AttendRoom(r.Header)
 
 	if err != nil || chatId == 0 || userId == 0 {
