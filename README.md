@@ -6,9 +6,10 @@
 
 ## 프로젝트 구성
 
-- chat server
-- kafka server
-- client
+- [broker server (web socket)](https://github.com/PARKNAMSU/chat-analyze-server/tree/main/broker-server)
+- [api serverless](https://github.com/PARKNAMSU/chat-analyze-server/tree/main/api-serverless)
+- [kafka](https://github.com/PARKNAMSU/chat-analyze-server/tree/main/kafka)
+- [client]()
 
 ## 프로젝트 아키텍처
 
