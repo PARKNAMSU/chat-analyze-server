@@ -1,41 +1,17 @@
 # chat-system
+
 ## 프로젝트 설명
-* 채팅 시스템을 제공해주는 서비스
 
-## 프로젝트 세팅
-### 종속성 설치
-```
-go mod tidy
-```
-### .env 파일 세팅
-```
-# sample
+- 채팅 시스템을 제공해주는 서비스
 
-PORT=
-SERVER_API_KEY=""
-ENVIROMENT=""
+## 프로젝트 구성
 
-MYSQL_SLAVE_USER=""
-MYSQL_SLAVE_PASSWORD=""
-MYSQL_SLAVE_HOST=""
-MYSQL_SLAVE_DATABASE=""
-
-MYSQL_MASTER_USER=""
-MYSQL_MASTER_PASSWORD=""
-MYSQL_MASTER_HOST=""
-MYSQL_MASTER_DATABASE=""
-
-PG_SLAVE_USER=""
-PG_SLAVE_PASSWORD=""
-PG_SLAVE_HOST=""
-PG_SLAVE_DATABASE=""
-
-PG_MASTER_USER=""
-PG_MASTER_PASSWORD=""
-PG_MASTER_HOST=""
-PG_MASTER_DATABASE=""
-```
+- chat server
+- kafka server
+- client
 
 ## 프로젝트 아키텍처
+
+![img1](https://www.notion.so/181a454a1a138062b02ae7095cf40757?pvs=4#181a454a1a13805ead77dc766e553919)
 
 ## 사용 stack
