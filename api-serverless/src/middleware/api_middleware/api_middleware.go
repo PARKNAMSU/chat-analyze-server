@@ -6,7 +6,6 @@ import (
 
 	"chat-platform-api.com/chat-platform-api/src/type/model/common_model"
 	api_variable "chat-platform-api.com/chat-platform-api/src/variable/api_varialbe"
-	"github.com/aws/aws-lambda-go/events"
 )
 
 var (
@@ -15,7 +14,7 @@ var (
 	deleteURLS = []string{"platform/delete"}
 )
 
-func CheckAPIUrlMiddleware(request events.APIGatewayProxyRequest, globalParams *common_model.GlobalParameter) error {
+func CheckAPIUrlMiddleware(request *common_model.CustomAPIRequest) error {
 	isContains := func(allowUrls []string, url string) bool {
 		for _, allow := range allowUrls {
 			if strings.Contains(allow, url) {
@@ -42,11 +41,14 @@ func CheckAPIUrlMiddleware(request events.APIGatewayProxyRequest, globalParams *
 		allowMethod = "DELETE"
 	}
 
-	if allowMethod == "" || strings.ToUpper(request.HTTPMethod) != allowMethod {
+	request.HTTPMethod = strings.ToUpper(request.HTTPMethod)
+
+	if allowMethod == "" || request.HTTPMethod != allowMethod {
 		return errors.New(api_variable.RESPONSE_INVALID_PATH)
 	}
 
-	(*globalParams)["url"] = mainUrl
+	request.GlobalParameter["url"] = mainUrl
+	
 
 	return nil
 }

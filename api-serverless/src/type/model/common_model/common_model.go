@@ -6,5 +6,5 @@ type GlobalParameter = map[string]any
 
 type CustomAPIRequest struct {
 	events.APIGatewayProxyRequest
-	globalParameter *GlobalParameter
+	GlobalParameter GlobalParameter
 }

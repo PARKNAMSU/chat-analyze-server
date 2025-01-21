@@ -13,9 +13,12 @@ import (
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	urls := strings.Split(request.Path, "/")
 
-	globalParams := make(common_model.GlobalParameter)
+	clientRequest := common_model.CustomAPIRequest{
+		APIGatewayProxyRequest: request,
+		GlobalParameter:        make(common_model.GlobalParameter),
+	}
 
-	if err := api_middleware.CheckAPIUrlMiddleware(request, &globalParams); err != nil {
+	if err := api_middleware.CheckAPIUrlMiddleware(&clientRequest); err != nil {
 		return events.APIGatewayProxyResponse{
 			Body:       err.Error(),
 			StatusCode: api_variable.STATUS_BAD_REQUEST,
@@ -30,6 +33,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	case "update":
 	case "withdraw":
 	case "getData":
+	case "getStat":
 	default:
 		response = events.APIGatewayProxyResponse{
 			Body:       api_variable.RESPONSE_INVALID_PATH,
