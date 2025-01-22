@@ -3,13 +3,14 @@ package jwt_tool
 import (
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 var (
-	jwtSignMethod = jwt.SigningMethodES256
+	jwtSignMethod = jwt.SigningMethodHS256
 )
 
 func GenerateToken[T any](data T, secretKey string, expired time.Duration) string {
@@ -22,7 +23,12 @@ func GenerateToken[T any](data T, secretKey string, expired time.Duration) strin
     // 토큰생성
 	t := jwt.NewWithClaims(jwtSignMethod, claim)
 
-	token, _ := t.SignedString(secretKey)
+	token, err := t.SignedString([]byte(secretKey))
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
 	return token
 }
 

@@ -1,12 +1,13 @@
 package main
 
 import (
-	"log"
-	"strings"
+	"fmt"
+	"time"
+
+	"chat-platform-api.com/chat-platform-api/src/tool/jwt_tool"
 )
 
 func main() {
-	urls := strings.Split("/api/platform/create", "/")
-
-	log.Println(strings.Join(urls[2:], "/"))
+	data := jwt_tool.GenerateToken[string]("test","aaaabbbb",time.Minute * 30)
+	fmt.Println(data)
 }
