@@ -8,3 +8,5 @@ type CustomAPIRequest struct {
 	events.APIGatewayProxyRequest
 	GlobalParameter GlobalParameter
 }
+
+type Middleware func (request *CustomAPIRequest) error

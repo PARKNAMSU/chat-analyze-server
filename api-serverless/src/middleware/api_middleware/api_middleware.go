@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"chat-platform-api.com/chat-platform-api/src/type/model/common_model"
-	api_variable "chat-platform-api.com/chat-platform-api/src/variable/api_varialbe"
+	"chat-platform-api.com/chat-platform-api/src/variable/api_variable"
 )
 
 func CheckAPIUrlMiddleware(request *common_model.CustomAPIRequest) error {

@@ -22,8 +22,8 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	err := middleware.ExecMiddlewares(
 		&clientRequest,
 		api_middleware.CheckAPIUrlMiddleware,
-	)	
-
+	)
+	
 	if  err != nil {
 		return events.APIGatewayProxyResponse{
 			Body:       err.Error(),
@@ -31,15 +31,15 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		}, nil
 	}
 
+
 	var response events.APIGatewayProxyResponse
 
 	switch urls[2] {
-	case "register":
-	case "issueToken":
-	case "update":
-	case "withdraw":
-	case "getData":
-	case "getStat":
+	case "signUp":
+	case "signIn":
+	case "revoke":
+	case "sendEmail":
+	case "authentication":
 	default:
 		response = events.APIGatewayProxyResponse{
 			Body:       api_variable.RESPONSE_INVALID_PATH,
