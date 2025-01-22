@@ -16,5 +16,10 @@ const (
 )
 
 const (
-	RESPONSE_INVALID_PATH = "invalid url path"
+	RESPONSE_INVALID_PATH = "Invalid url path"
+	INVALID_ROUTER        = "Invalid Router"
+	INVALID_API_KEY       = "Invalid API Key"
+	NOT_FOUND             = "Not Found"
+	INVALID_AUTHORIZATION = "unAuthorization"
+	PERMISSION_DENIED     = "Permission Denied"
 )
