@@ -6,8 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"chat-analyze.com/chat-analyze-server/internal/cache/room_cache"
-
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
 	"github.com/gorilla/websocket"
 )
 
@@ -31,29 +30,27 @@ func GetWebSocket(w http.ResponseWriter, r *http.Request) *websocket.Conn {
 	return conn
 }
 
-func AttendRoom(header http.Header) (
-	userId int,
-	chatId int,
+func GetConnData(w http.ResponseWriter, r *http.Request) (
+	connData *common_model.GetConnectData,
 	err error,
 ) {
-	userId = 0
-	chatId = 0
-
-	headerUserId := header.Get("userId")
-	headerChatId := header.Get("chatId")
+	headerUserId := r.Header.Get("userId")
+	headerChatId := r.Header.Get("chatId")
 
 	if headerUserId == "" || headerChatId == "" {
-		return userId, chatId, errors.New("Not Exist UserId or ChatId")
+		return nil, errors.New("Not Exist UserId or ChatId")
 	}
 
-	userId, err = strconv.Atoi(headerUserId)
-	chatId, err = strconv.Atoi(headerChatId)
+	userId, err := strconv.Atoi(headerUserId)
+	chatId, err := strconv.Atoi(headerChatId)
 
 	if err != nil {
-		return userId, chatId, err
+		return nil, err
 	}
 
-	room_cache.SetChatCache(chatId, userId)
-
-	return userId, chatId, nil
+	return &common_model.GetConnectData{
+		UserId: userId,
+		ChatId: chatId,
+		Conn:   GetWebSocket(w, r),
+	}, nil
 }

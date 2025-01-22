@@ -82,8 +82,10 @@ const (
 	INVALID_ROUTER        = "Invalid Router"
 	INVALID_API_KEY       = "Invalid API Key"
 	NOT_FOUND             = "Not Found"
+	INVALID_ACCESS        = "Invalid Access"
 	INVALID_AUTHORIZATION = "unAuthorization"
 	PERMISSION_DENIED     = "Permission Denied"
+	INTERNAL_SERVER_ERROR = "INTERNAL SERVER ERROR"
 )
 
 const (

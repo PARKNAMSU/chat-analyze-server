@@ -1,20 +1,17 @@
 package router
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
-	"strings"
+	"strconv"
 
-	"chat-analyze.com/chat-analyze-server/internal/data_struct/dto/common_dto"
-	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
-	"chat-analyze.com/chat-analyze-server/internal/middleware/chat_middleware"
+	"chat-analyze.com/chat-analyze-server/internal/cache"
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/chat_model"
+	"chat-analyze.com/chat-analyze-server/internal/infra"
 	"chat-analyze.com/chat-analyze-server/internal/middleware/common_middleware"
 	"chat-analyze.com/chat-analyze-server/internal/middleware/index_middleware"
 	"chat-analyze.com/chat-analyze-server/internal/option"
-	"chat-analyze.com/chat-analyze-server/internal/router/chat_router"
 	"chat-analyze.com/chat-analyze-server/internal/tools"
 	"github.com/joho/godotenv"
 )
@@ -28,53 +25,40 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		tools.SendErrorResponse(w, option.NOT_FOUND, option.StatusNotFound)
 	}
-	conn := tools.GetWebSocket(w, r)
 
-	userId, isUserExist := r.Context().Value(option.CONTEXT_USER_ID).(int)
-	chatId, isChatExist := r.Context().Value(option.CONTEXT_CHAT_ID).(int)
+	connData, err := tools.GetConnData(w, r)
 
-	if !isUserExist || !isChatExist {
-		tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
+	if err != nil {
+		tools.SendErrorResponse(
+			w,
+			option.INTERNAL_SERVER_ERROR,
+			option.StatusInternalServerError,
+		)
 		return
 	}
 
-	connData := &common_model.GetConnectData{
-		Conn:   conn,
-		UserId: userId,
-		ChatId: chatId,
-	}
+	conn := connData.Conn
+	cache.SetChatCache(connData)
 
 	defer conn.Close()
-	for {
-		_, message, err := conn.ReadMessage()
-		if err != nil {
-			break
-		}
 
-		var clientData common_dto.DefaultRequest
+	msgChan := make(chan chat_model.MessageData)
 
-		err = json.Unmarshal(message, &clientData)
+	consumer := infra.KafkaSubscribeTopic(strconv.Itoa(connData.ChatId))
 
-		if err != nil {
-			tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
-			continue
-		}
+	if consumer == nil {
+		tools.SendErrorResponse(
+			w,
+			option.INTERNAL_SERVER_ERROR,
+			option.StatusInternalServerError,
+		)
+		return
+	}
 
-		routers := strings.Split(clientData.Router, "/")
+	go infra.KafkaPolling(consumer, msgChan)
 
-		if len(routers) < 3 {
-			tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
-			continue
-		}
-
-		switch routers[1] {
-		case "check":
-			tools.WSSendCheck(conn)
-		case "chat":
-			chat_router.WSChatRouter(connData, routers[2])
-		default:
-			tools.WSSendError(conn, option.INVALID_ROUTER, option.StatusBadRequest)
-		}
+	for messages := range msgChan {
+		tools.WSSendMessage(connData, messages)
 	}
 }
 
@@ -86,12 +70,7 @@ func App() {
 		w.Write([]byte("alive"))
 	})
 
-	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler, common_middleware.PlatformValidation, chat_middleware.AttendChatMiddleware))
-
-	mux.HandleFunc("/restartTest", func(w http.ResponseWriter, r *http.Request) {
-		log.Panicln("server down")
-		w.Write([]byte("server down"))
-	})
+	mux.HandleFunc("/ws", index_middleware.MiddlewareChaining(socketHandler))
 
 	tools.PrintInfoLog("App", "Broker Server started at "+port)
 

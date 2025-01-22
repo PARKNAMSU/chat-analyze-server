@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
 	"chat-analyze.com/chat-analyze-server/internal/data_struct/response/common_response"
 	"github.com/gorilla/websocket"
 )
@@ -32,5 +33,13 @@ func WSSendCheck(conn *websocket.Conn) {
 	conn.WriteJSON(common_response.ResponseDefault{
 		Message: &message,
 		Status:  200,
+	})
+}
+
+func WSSendMessage[T any](conn *common_model.GetConnectData, responseData T) {
+	conn.Conn.WriteJSON(map[string]any{
+		"userId": conn.UserId,
+		"chatId": conn.ChatId,
+		"data":   responseData,
 	})
 }
