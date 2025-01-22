@@ -13,6 +13,15 @@
 
 ## 프로젝트 아키텍처
 
-![Image](https://github.com/user-attachments/assets/b7986b7a-d746-4d50-a8bc-27ddea4a929f)
+<img width="727" alt="Image" src="https://github.com/user-attachments/assets/6199ba51-9d13-4bc0-aa23-0af8b09aa99e" />
+
+### 아키텍처 설명
+
+1. API 비즈니스 로직을 처리할 Lambda 함수
+2. API 게이트웨이를 통해 Client 와 Lambda 함수 간 통신
+3. 서비스의 데이터 저장소
+4. 메세지 Publish, Poll 이벤트 처리를 위한 Kafka 서버.
+5. Client 의 Kafka 구독 처리를 위한 중계 서버
+6. 서비스를 이용하는 클라이언트
 
 ## 사용 stack
