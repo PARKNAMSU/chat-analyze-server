@@ -1,5 +1,5 @@
 #!/bin/bash
-
+sudo amazon-linux-extras install java-openjdk11
 sudo tee /etc/yum.repos.d/jenkins.repo<<EOF
 [jenkins]
 name=Jenkins
