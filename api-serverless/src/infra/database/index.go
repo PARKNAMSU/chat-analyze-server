@@ -11,12 +11,16 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+/*
+db engine 타입.
+
+description:
+
+	확장성 있는 db 연결을 위해 해당 타입으로 DBMS 종류 정의
+*/
 type dbEngine = string
 
-var (
-	mysqlEngine dbEngine = "mysql"
-)
-
+/* db connect 시 설정 데이터 타입 */
 type dbConfig struct {
 	user             string
 	password         string
@@ -26,13 +30,24 @@ type dbConfig struct {
 	maxAllowedPacket uint
 }
 
+/*
+외부에서 사용할 DB Connect.
+
+description:
+
+	내부 인자 직접 변경 및 사용할 수 없게 private 하게 설정
+*/
 type CustomDB struct {
-	engine        dbEngine
-	conn          *sqlx.DB
-	config        dbConfig
-	tx            *sqlx.Tx
-	isTransaction bool
+	engine        dbEngine // DBMS 타입
+	conn          *sqlx.DB // connection 객체
+	config        dbConfig // db 설정
+	tx            *sqlx.Tx // transaction 객체
+	isTransaction bool     // transaction 사용 여부
 }
+
+var (
+	mysqlEngine dbEngine = "mysql"
+)
 
 func (c *CustomDB) Connect() {
 	if c.conn != nil {

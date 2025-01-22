@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	mysqlMasterDB *CustomDB
-	mysqlSlaveDB  *CustomDB
+	mysqlMasterDB *CustomDB // write DB
+	mysqlSlaveDB  *CustomDB // read DB
 )
 
 func getMysqlConnect(config dbConfig) string {
@@ -48,10 +48,10 @@ func InitMysqlSlave(isTransaction bool) {
 	mysqlSlaveDB = &CustomDB{
 		engine: mysqlEngine,
 		config: dbConfig{
-			user:             os.Getenv("MYSQL_USER_MASTER"),
-			password:         os.Getenv("MYSQL_PASSWORD_MASTER"),
-			host:             os.Getenv("MYSQL_HOST_MASTER"),
-			database:         os.Getenv("MYSQL_DATABASE_MASTER"),
+			user:             os.Getenv("MYSQL_USER_SLAVE"),
+			password:         os.Getenv("MYSQL_PASSWORD_SLAVE"),
+			host:             os.Getenv("MYSQL_HOST_SLAVE"),
+			database:         os.Getenv("MYSQL_DATABASE_SLAVE"),
 			charset:          "utf8mb4",
 			maxAllowedPacket: 0,
 		},
