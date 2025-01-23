@@ -29,7 +29,7 @@ func GetUseCase() *AuthUseCase {
 }
 
 // 사용자 토큰 생성
-func (u *AuthUseCase) GenerateToken(user user_model.UserData, deviceId string, ipAddr string) (*user_response.UserTokenResponse, error) {
+func (u *AuthUseCase) GenerateToken(user user_model.UserData, deviceId string) (*user_response.UserTokenResponse, error) {
 	var err error
 	defer func() {
 		if err != nil {
@@ -51,7 +51,7 @@ func (u *AuthUseCase) GenerateToken(user user_model.UserData, deviceId string, i
 		auth_variable.REFRESH_TOKEN_EXPIRATION,
 	)
 
-	if err = u.userRepository.SetRefreshToken(user.UserId, refreshToken, deviceId, ipAddr); err != nil { // Refresh Token 데이터 저장
+	if err = u.userRepository.SetRefreshToken(user.UserId, refreshToken, deviceId, user.IpAddr); err != nil { // Refresh Token 데이터 저장
 		return nil, err
 	}
 

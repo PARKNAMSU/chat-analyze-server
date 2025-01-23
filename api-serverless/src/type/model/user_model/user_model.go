@@ -3,7 +3,7 @@ package user_model
 type UserData struct {
 	UserId         int     `json:"userId"`
 	Status         int     `json:"status"`
-	IpAddr         int     `json:"ipAddr"`
+	IpAddr         string  `json:"ipAddr"`
 	Email          *string `json:"email"`
 	OauthId        *string `json:"oauthId"`
 	OauthHost      *string `json:"oauthHost"`
