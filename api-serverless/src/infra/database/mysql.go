@@ -5,11 +5,6 @@ import (
 	"os"
 )
 
-var (
-	mysqlMasterDB *CustomDB // write DB
-	mysqlSlaveDB  *CustomDB // read DB
-)
-
 func getMysqlConnect(config dbConfig) string {
 	return fmt.Sprintf(
 		`%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&maxAllowedPacket=%d`,
@@ -22,11 +17,8 @@ func getMysqlConnect(config dbConfig) string {
 	)
 }
 
-func InitMysqlMaster(isTransaction bool) {
-	if mysqlMasterDB != nil {
-		return
-	}
-	mysqlMasterDB = &CustomDB{
+func GetMysqlMaster(isTransaction bool) *CustomDB {
+	mysqlMasterDB := &CustomDB{
 		engine: mysqlEngine,
 		config: dbConfig{
 			user:             os.Getenv("MYSQL_USER_MASTER"),
@@ -39,13 +31,11 @@ func InitMysqlMaster(isTransaction bool) {
 		isTransaction: isTransaction,
 	}
 	mysqlMasterDB.Connect()
+	return mysqlMasterDB
 }
 
-func InitMysqlSlave(isTransaction bool) {
-	if mysqlSlaveDB != nil {
-		return
-	}
-	mysqlSlaveDB = &CustomDB{
+func GetMysqlSlave() *CustomDB {
+	mysqlSlaveDB := &CustomDB{
 		engine: mysqlEngine,
 		config: dbConfig{
 			user:             os.Getenv("MYSQL_USER_SLAVE"),
@@ -55,15 +45,8 @@ func InitMysqlSlave(isTransaction bool) {
 			charset:          "utf8mb4",
 			maxAllowedPacket: 0,
 		},
-		isTransaction: isTransaction,
+		isTransaction: false,
 	}
 	mysqlSlaveDB.Connect()
-}
-
-func GetMysqlMaster() *CustomDB {
-	return mysqlMasterDB
-}
-
-func GetMysqlSlave() *CustomDB {
 	return mysqlSlaveDB
 }

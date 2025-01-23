@@ -27,3 +27,13 @@ type UserOauth struct {
 	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
 	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
 }
+
+// revoke token 검증을 위한 테이블
+type UserRefreshToken struct {
+	UserId    *int       `json:"userId" db:"user_id"`
+	Token     *string    `json:"token" db:"token"`
+	IpAddr    *string    `json:"ipAddr" db:"ip_addr"`
+	DeviceId  *string    `json:"deviceId" db:"device_id"`
+	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
+	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
+}

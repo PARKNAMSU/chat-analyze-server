@@ -74,21 +74,28 @@ func (c *CustomDB) Connect() {
 	db.SetConnMaxLifetime(time.Minute)
 	db.SetConnMaxIdleTime(time.Minute)
 
-	maxIdleConn := 5
-	maxOpenConn := 5
+	maxIdleConn := 1
+	maxOpenConn := 1
 	switch common_variable.ENVIRONMENT {
 	case "production":
-		maxIdleConn = 15
-		maxOpenConn = 15
+		maxIdleConn = 5
+		maxOpenConn = 5
 	case "staging":
-		maxIdleConn = 10
-		maxOpenConn = 10
+		maxIdleConn = 2
+		maxOpenConn = 2
 	}
 
 	db.SetMaxIdleConns(maxIdleConn)
 	db.SetMaxOpenConns(maxOpenConn)
 
 	c.conn = db
+}
+
+func (c *CustomDB) Close() {
+	if c.conn == nil {
+		return
+	}
+	c.conn.Close()
 }
 
 func (c *CustomDB) Transaction() {
@@ -118,14 +125,14 @@ func (c *CustomDB) Rollback() {
 	c.tx = nil
 }
 
-func (c *CustomDB) QueryExecute(query string, queryParams []any) (sql.Result, error) {
+func (c *CustomDB) QueryExecute(query string, queryParams ...any) (sql.Result, error) {
 	if c.isTransaction {
 		return c.tx.Exec(query, queryParams...)
 	}
 	return c.conn.Exec(query, queryParams...)
 }
 
-func (c *CustomDB) QuerySelect(query string, queryParams []any) any {
+func (c *CustomDB) QuerySelect(query string, queryParams ...any) any {
 	var data any
 
 	if c.isTransaction {
@@ -134,4 +141,11 @@ func (c *CustomDB) QuerySelect(query string, queryParams []any) any {
 	c.conn.Select(&data, query, queryParams...)
 
 	return data
+}
+
+func (c *CustomDB) NamedQueryExecute(query string, params any) (sql.Result, error) {
+	if c.isTransaction {
+		return c.tx.NamedExec(query, params)
+	}
+	return c.conn.NamedExec(query, params)
 }
