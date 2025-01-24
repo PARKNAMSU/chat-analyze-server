@@ -5,14 +5,16 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"sync"
 
 	"chat-analyze.com/chat-analyze-server/internal/cache"
 	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/chat_model"
+	"chat-analyze.com/chat-analyze-server/internal/data_struct/model/common_model"
 	"chat-analyze.com/chat-analyze-server/internal/infra"
 	"chat-analyze.com/chat-analyze-server/internal/middleware/common_middleware"
 	"chat-analyze.com/chat-analyze-server/internal/middleware/index_middleware"
-	"chat-analyze.com/chat-analyze-server/internal/option"
 	"chat-analyze.com/chat-analyze-server/internal/tools"
+	"chat-analyze.com/chat-analyze-server/internal/variable"
 	"github.com/joho/godotenv"
 )
 
@@ -23,7 +25,7 @@ var (
 
 func socketHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		tools.SendErrorResponse(w, option.NOT_FOUND, option.StatusNotFound)
+		tools.SendErrorResponse(w, variable.NOT_FOUND, variable.StatusNotFound)
 	}
 
 	connData, err := tools.GetConnData(w, r)
@@ -31,8 +33,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		tools.SendErrorResponse(
 			w,
-			option.INTERNAL_SERVER_ERROR,
-			option.StatusInternalServerError,
+			variable.INTERNAL_SERVER_ERROR,
+			variable.StatusInternalServerError,
 		)
 		return
 	}
@@ -49,8 +51,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	if consumer == nil {
 		tools.SendErrorResponse(
 			w,
-			option.INTERNAL_SERVER_ERROR,
-			option.StatusInternalServerError,
+			variable.INTERNAL_SERVER_ERROR,
+			variable.StatusInternalServerError,
 		)
 		return
 	}
@@ -58,7 +60,27 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	go infra.KafkaPolling(consumer, msgChan)
 
 	for messages := range msgChan {
-		tools.WSSendMessage(connData, messages)
+		conns := cache.GetChatConns(messages.ChatId)
+		var wg sync.WaitGroup
+
+		wg.Add(len(conns))
+
+		for userId, conn := range conns {
+			userId := userId
+			conn := conn
+			go func() {
+				defer wg.Done()
+				if userId == connData.UserId {
+					return
+				}
+				tools.WSSendMessage(&common_model.GetConnectData{
+					UserId: userId,
+					ChatId: connData.ChatId,
+					Conn:   conn,
+				}, messages)
+			}()
+		}
+		wg.Wait()
 	}
 }
 

@@ -34,7 +34,7 @@ func getConsumer() sarama.Consumer {
 	return consumer
 }
 
-func CloseConsummer() {
+func CloseConsumer() {
 	if consumer == nil {
 		return
 	}
@@ -50,8 +50,8 @@ func KafkaSubscribeTopic(topic string) sarama.PartitionConsumer {
 	return partitionConsumer
 }
 
-func KafkaPolling[T any](topicConsumber sarama.PartitionConsumer, msgChan chan T) {
-	for msg := range topicConsumber.Messages() {
+func KafkaPolling[T any](topicConsumer sarama.PartitionConsumer, msgChan chan T) {
+	for msg := range topicConsumer.Messages() {
 		var data T
 		if err := json.Unmarshal(msg.Value, &data); err != nil {
 			tools.PrintErrorLog("KafkaPolling", err.Error())
