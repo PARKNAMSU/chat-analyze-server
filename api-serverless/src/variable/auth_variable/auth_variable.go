@@ -8,7 +8,7 @@ import (
 )
 
 type PermissionInformation struct {
-	Type         string
+	Grade        string
 	Permission   int
 	MaxChatNum   int
 	MaxUserNum   int
@@ -35,7 +35,7 @@ var (
 	}
 
 	PREMIUM_PERMISSION = PermissionInformation{
-		Type:         "PREMIUM",
+		Grade:        "PREMIUM",
 		Permission:   Permissions["all"],
 		MaxChatNum:   5000,
 		MaxUserNum:   20000,
@@ -43,7 +43,7 @@ var (
 	}
 
 	NORMAL_PERMISSION = PermissionInformation{
-		Type: "NORMAL",
+		Grade: "NORMAL",
 		Permission: Permissions["oneToOneChat"] +
 			Permissions["groupChat"],
 		MaxChatNum:   1000,
