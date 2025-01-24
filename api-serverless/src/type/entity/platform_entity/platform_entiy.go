@@ -12,7 +12,7 @@ type PlatformEntity struct {
 	UpdatedAt           *time.Time `json:"updatedAt" db:"updated_at"`
 }
 
-type PlatformPermission struct {
+type PlatformPermissionEntity struct {
 	Domain        *string    `json:"domain" db:"domain"`
 	PermissionBit *int       `json:"permissionBit" db:"permission_bit"`
 	Grade         *string    `json:"grade" db:"grade"`
@@ -23,7 +23,7 @@ type PlatformPermission struct {
 	UpdatedAt     *time.Time `json:"updatedAt" db:"updated_at"`
 }
 
-type PlatformAccessKey struct {
+type PlatformAccessKeyEntity struct {
 	Domain    *string    `json:"domain" db:"domain"`
 	AccessKey *string    `json:"accessKey" db:"access_key"`
 	SecretKey *string    `json:"secretKey" db:"secret_key"`

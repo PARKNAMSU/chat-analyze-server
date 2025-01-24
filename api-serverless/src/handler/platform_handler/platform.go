@@ -16,18 +16,17 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	clientRequest := common_model.CustomAPIRequest{
 		APIGatewayProxyRequest: request,
-		GlobalParameter:        make(common_model.GlobalParameter),
 	}
 
-	err := middleware.ExecMiddlewares(
+	err, code := middleware.ExecMiddlewares(
 		&clientRequest,
-		api_middleware.CheckAPIUrlMiddleware,
-	)	
+		api_middleware.GetAPIMiddleware(),
+	)
 
-	if  err != nil {
+	if err != nil {
 		return events.APIGatewayProxyResponse{
 			Body:       err.Error(),
-			StatusCode: api_variable.STATUS_BAD_REQUEST,
+			StatusCode: code,
 		}, nil
 	}
 

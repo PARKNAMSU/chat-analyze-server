@@ -1,8 +1,10 @@
 package auth_usecase
 
 import (
+	"chat-platform-api.com/chat-platform-api/src/interface/repository_interface"
 	"chat-platform-api.com/chat-platform-api/src/repository/user_repository"
 	"chat-platform-api.com/chat-platform-api/src/tool/jwt_tool"
+	"chat-platform-api.com/chat-platform-api/src/usecase/common_usecase"
 
 	"chat-platform-api.com/chat-platform-api/src/type/dto/user_dto"
 	"chat-platform-api.com/chat-platform-api/src/type/model/user_model"
@@ -12,7 +14,8 @@ import (
 
 // 사용자 인증 Use Case
 type AuthUseCase struct {
-	userRepository *user_repository.UserRepository
+	*common_usecase.UseCase
+	userRepository repository_interface.UserRepositoryImpl
 }
 
 var (
@@ -32,6 +35,7 @@ func GetUseCase() *AuthUseCase {
 func (u *AuthUseCase) GenerateToken(user user_model.UserData, deviceId string) (*user_response.UserTokenResponse, error) {
 	var err error
 	defer func() {
+		u.ErrorCheck(u.userRepository, err)
 		if err != nil {
 			u.userRepository.Rollback()
 			return
