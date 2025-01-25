@@ -22,4 +22,5 @@ const (
 	NOT_FOUND             = "Not Found"
 	INVALID_AUTHORIZATION = "unAuthorization"
 	PERMISSION_DENIED     = "Permission Denied"
+	INTERNAL_SERVER_ERROR = "Internal Server Error"
 )

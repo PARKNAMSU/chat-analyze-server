@@ -16,4 +16,9 @@ type RepositoryImpl interface {
 type UserRepositoryImpl interface {
 	RepositoryImpl
 	SetRefreshToken(userId int, token string, deviceId string, ipAddr string) error
+	CreateUser(ipAddr string) (int, error)
+}
+
+type PlatformRepositoryImpl interface {
+	RepositoryImpl
 }

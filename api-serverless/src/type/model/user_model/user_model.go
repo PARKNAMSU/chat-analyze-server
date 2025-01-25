@@ -11,3 +11,10 @@ type UserData struct {
 	Authentication int     `json:"authentication"`
 	AuthType       *string `json:"authType"`
 }
+
+type SetUserInformation struct {
+	UserId   int     `json:"userId"`
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
+	Name     *string `json:"name"`
+}
