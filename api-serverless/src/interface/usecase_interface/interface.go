@@ -11,5 +11,6 @@ type UseCaseImpl interface {
 }
 
 type AuthUseCaseImpl interface {
+	UseCaseImpl
 	GenerateToken(user user_model.UserData, deviceId string) (*user_response.UserTokenResponse, error)
 }
