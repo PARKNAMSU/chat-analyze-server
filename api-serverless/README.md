@@ -2,6 +2,7 @@
 
 ## 프로젝트 패키지 구조
 <img width="799" alt="Image" src="https://github.com/user-attachments/assets/1fa551c2-e012-4657-a66f-e62e20b34aaf" />
+
 ## 사용 스택
 
 ## 보안 정책
