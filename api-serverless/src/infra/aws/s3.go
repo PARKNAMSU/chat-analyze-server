@@ -2,7 +2,6 @@ package aws_config
 
 import (
 	"context"
-	"log"
 	"strings"
 	"time"
 
@@ -63,7 +62,6 @@ func (client *S3Client) UploadS3V2(input UploadInput, retryCount int) *manager.U
 		strings.Contains(err.Error(), "S3: PutObject, exceeded maximum number of attempts, 1, https response") &&
 		retryCount > 0 {
 		time.Sleep(time.Millisecond * (10 * time.Duration(10-retryCount)))
-		log.Println("s3 Upload retry")
 		return client.UploadS3V2(input, retryCount-1)
 	} else if err != nil {
 		logging_tool.PrintErrorLog("UploadS3V2", err.Error())

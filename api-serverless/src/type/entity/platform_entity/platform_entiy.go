@@ -31,3 +31,12 @@ type PlatformAccessKeyEntity struct {
 	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
 	UpdatedAt *time.Time `json:"updatedAt" db:"updated_at"`
 }
+
+type PlatformUser struct {
+	UserKey     *string    `json:"userKey" db:"user_key"`
+	Domain      *string    `json:"domain" db:"domain"`
+	KeyType     *int       `json:"keyType" db:"key_type"`
+	Description *string    `json:"description" db:"description"`
+	CreatedAt   *time.Time `json:"createdAt" db:"created_at"`
+	UpdatedAt   *time.Time `json:"updatedAt" db:"updated_at"`
+}
