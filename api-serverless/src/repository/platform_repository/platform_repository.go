@@ -1,7 +1,6 @@
 package platform_repository
 
 import (
-	"chat-platform-api.com/chat-platform-api/src/interface/repository_interface"
 	"chat-platform-api.com/chat-platform-api/src/repository/common_repository"
 )
 
@@ -13,7 +12,7 @@ type PlatformRepository struct {
 	common_repository.Repository
 }
 
-func GetUserRepository() repository_interface.PlatformRepositoryImpl {
+func GetUserRepository() *PlatformRepository {
 	if repository == nil {
 		repository.InitRepository()
 	}

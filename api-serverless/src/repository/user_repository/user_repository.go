@@ -4,7 +4,6 @@ import (
 	"errors"
 	"strings"
 
-	"chat-platform-api.com/chat-platform-api/src/interface/repository_interface"
 	"chat-platform-api.com/chat-platform-api/src/repository/common_repository"
 	"chat-platform-api.com/chat-platform-api/src/tool/encrypt_tool"
 	"chat-platform-api.com/chat-platform-api/src/tool/logging_tool"
@@ -13,15 +12,15 @@ import (
 	"chat-platform-api.com/chat-platform-api/src/variable/auth_variable"
 )
 
-var (
-	repository *UserRepository
-)
-
 type UserRepository struct {
 	common_repository.Repository
 }
 
-func GetUserRepository() repository_interface.UserRepositoryImpl {
+var (
+	repository *UserRepository
+)
+
+func GetUserRepository() *UserRepository {
 	if repository == nil {
 		repository.InitRepository()
 	}

@@ -5,6 +5,8 @@ import (
 
 	"chat-platform-api.com/chat-platform-api/src/middleware"
 	"chat-platform-api.com/chat-platform-api/src/middleware/api_middleware"
+	"chat-platform-api.com/chat-platform-api/src/middleware/validation_middleware"
+	"chat-platform-api.com/chat-platform-api/src/repository/user_repository"
 	"chat-platform-api.com/chat-platform-api/src/type/model/common_model"
 	api_variable "chat-platform-api.com/chat-platform-api/src/variable/api_variable"
 	"github.com/aws/aws-lambda-go/events"
@@ -21,6 +23,9 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	err, code := middleware.ExecMiddlewares(
 		&clientRequest,
 		api_middleware.GetAPIMiddleware(),
+		validation_middleware.GetUserValidationMiddleware(
+			user_repository.GetUserRepository(),
+		),
 	)
 
 	if err != nil {

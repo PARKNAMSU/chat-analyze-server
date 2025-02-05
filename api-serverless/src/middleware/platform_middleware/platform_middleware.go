@@ -2,7 +2,7 @@ package platform_middleware
 
 import (
 	"chat-platform-api.com/chat-platform-api/src/interface/middleware_interface"
-	"chat-platform-api.com/chat-platform-api/src/interface/repository_interface"
+	"chat-platform-api.com/chat-platform-api/src/interface/repository_interface/platform_interface"
 	"chat-platform-api.com/chat-platform-api/src/middleware/common_middleware"
 	"chat-platform-api.com/chat-platform-api/src/type/model/common_model"
 )
@@ -20,7 +20,7 @@ func GetUserValidationMiddleware() middleware_interface.MiddlewareImpl {
 
 type PlatformMiddleware struct {
 	common_middleware.Middleware
-	platformRepo repository_interface.PlatformRepositoryImpl
+	platformRepo platform_interface.PlatformRepositoryImpl
 }
 
 // Do implements middleware_interface.MiddlewareImpl.
