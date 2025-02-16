@@ -7,6 +7,7 @@ import (
 	"chat-platform-api.com/chat-platform-api/src/repository/common_repository"
 	"chat-platform-api.com/chat-platform-api/src/tool/encrypt_tool"
 	"chat-platform-api.com/chat-platform-api/src/tool/logging_tool"
+	"chat-platform-api.com/chat-platform-api/src/type/entity/user_entity"
 	"chat-platform-api.com/chat-platform-api/src/type/model/user_model"
 	"chat-platform-api.com/chat-platform-api/src/variable/api_variable"
 	"chat-platform-api.com/chat-platform-api/src/variable/auth_variable"
@@ -98,6 +99,59 @@ func (r *UserRepository) SetUserInformation(userData user_model.SetUserInformati
 	)
 	_, err = r.GetMasterDB().NamedQueryExecute(query, userData)
 	return err
+}
+
+func (r *UserRepository) LoginCheck(email string, password string) (user_model.UserData, bool) {
+	type User struct {
+		user_entity.UserEntity
+		user_entity.UserInformationEntity
+		user_entity.UserOauthEntity
+	}
+
+	var userEntity []User
+
+	encryptPassword, _ := encrypt_tool.Encrypt([]byte(password), auth_variable.ENCRYPT_SECRET_KEY)
+
+	r.GetSlaveDB().QuerySelect(
+		&userEntity,
+		`SELECT 
+			ui.user_id, 
+			u.status, 
+			u.ip_addr,
+			ui.email,
+			uo.oauth_id,
+			uo.oauth_host,
+			ui.name,
+			ui.authentication,
+			ui.auth_type
+		FROM user AS u 
+		INNER JOIN user_information AS ui 
+		LEFT JOIN user_oauth AS uo 
+		WHERE 
+			ui.email = ? AND 
+			ui.password = ?
+		`,
+		email,
+		encryptPassword,
+	)
+	if len(userEntity) <= 0 {
+		return user_model.UserData{}, false
+	}
+
+	user := userEntity[0]
+
+	return user_model.UserData{
+		UserId:         *user.UserInformationEntity.UserId,
+		Status:         *user.Status,
+		IpAddr:         *user.IpAddr,
+		Authentication: *user.Authentication,
+		Email:          user.Email,
+		OauthId:        user.OauthId,
+		OauthHost:      user.OauthHost,
+		Name:           user.Name,
+		AuthType:       user.AuthType,
+	}, true
+
 }
 
 func (r *UserRepository) SetRefreshToken(userId int, token string, deviceId string, ipAddr string) error {

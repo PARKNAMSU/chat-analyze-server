@@ -132,15 +132,11 @@ func (c *CustomDB) QueryExecute(query string, queryParams ...any) (sql.Result, e
 	return c.conn.Exec(query, queryParams...)
 }
 
-func (c *CustomDB) QuerySelect(query string, queryParams ...any) any {
-	var data any
-
+func (c *CustomDB) QuerySelect(data any, query string, queryParams ...any) {
 	if c.isTransaction {
-		c.tx.Select(&data, query, queryParams...)
+		c.tx.Select(data, query, queryParams...)
 	}
-	c.conn.Select(&data, query, queryParams...)
-
-	return data
+	c.conn.Select(data, query, queryParams...)
 }
 
 func (c *CustomDB) NamedQueryExecute(query string, params any) (sql.Result, error) {
