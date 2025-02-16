@@ -1,8 +1,11 @@
 package auth_usecase
 
 import (
+	"errors"
+
 	"chat-platform-api.com/chat-platform-api/src/interface/repository_interface/user_interface"
 	"chat-platform-api.com/chat-platform-api/src/repository/user_repository"
+	"chat-platform-api.com/chat-platform-api/src/tool/common_tool"
 	"chat-platform-api.com/chat-platform-api/src/tool/jwt_tool"
 	"chat-platform-api.com/chat-platform-api/src/usecase/common_usecase"
 
@@ -75,5 +78,19 @@ func (u *AuthUseCase) SignUp(userData user_dto.SignUpDTO) (*user_response.UserTo
 // 로그인
 func (u *AuthUseCase) SignIn(signIn user_dto.SignInDTO) (*user_response.UserTokenResponse, error) {
 	// todo : 로그인 구현
-	return nil, nil
+	userData, isExist := u.userRepository.LoginCheck(signIn.Email, signIn.Password)
+
+	if !isExist {
+		return nil, errors.New("not exist user")
+	}
+
+	tokens, err := u.GenerateToken(userData, signIn.DeviceId)
+
+	// todo : 로그인 로깅처리
+	common_tool.ParallelExec()
+
+	// todo : 로그인 통계처리
+	common_tool.ParallelExec()
+
+	return tokens, err
 }
